@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace dvoshLibCore.Objects
 {
@@ -19,7 +20,8 @@ namespace dvoshLibCore.Objects
         internal Thread(ThreadDto dto)
         {
             _dto = dto;
-            this.Posts = _dto.threads.First().posts.Select(x => new Post(x)).ToList();
+            this.Posts = _dto.threads.First().posts.Where(x => x.comment != string.Empty).Select(x => new Post(x)).ToList();
+            
         }
     }
 
@@ -30,7 +32,7 @@ namespace dvoshLibCore.Objects
     {
         private PostInThread _dto;
 
-        public string Text { get => _dto.comment; }
+        public string Text { get; }
         public string Date { get => _dto.date; }
         public bool IsOp { get => _dto.op == 1 ? true : false; }
         public long Id { get => _dto.num; }
@@ -39,6 +41,15 @@ namespace dvoshLibCore.Objects
         internal Post(PostInThread dto)
         {
             _dto = dto;
+            this.Text = BeautifyText(_dto.comment);
+        }
+
+        private string BeautifyText(string text)
+        {
+            text = text.Replace("<br>", " ");
+            
+            text = Regex.Replace(text, "&.*;", string.Empty);
+            return Regex.Replace(text, "<[^>]+>", string.Empty);
         }
     }
 }
