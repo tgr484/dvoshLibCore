@@ -46,9 +46,8 @@ namespace dvoshLibCore.Objects
 
         private string BeautifyText(string text)
         {
-            text = text.Replace("<br>", " ");
-            
-            text = Regex.Replace(text, "&\S*;", string.Empty);
+            text = text.Replace("<br>", " ");            
+            text = Regex.Replace(text, @"&\S*;", string.Empty);
             return Regex.Replace(text, "<[^>]+>", string.Empty);
         }
     }
