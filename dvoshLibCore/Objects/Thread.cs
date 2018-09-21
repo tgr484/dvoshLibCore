@@ -48,7 +48,7 @@ namespace dvoshLibCore.Objects
         {
             text = text.Replace("<br>", " ");
             
-            text = Regex.Replace(text, "&.*;", string.Empty);
+            text = Regex.Replace(text, "&\S*;", string.Empty);
             return Regex.Replace(text, "<[^>]+>", string.Empty);
         }
     }
